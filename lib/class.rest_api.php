@@ -87,7 +87,14 @@ Class REST_API {
 			
 			case 'json':
 				header('Content-Type: text/plain; charset=utf-8');
-				$output = json_encode(XMLToArray::convert($xml));				
+				
+				$outputArray = XMLToArray::convert($xml);
+				$outputArray = XMLToArray::cleanArrayForJSON($outputArray);
+				
+				$outputArray = XMLToArray::processArrayForJSON($outputArray);
+
+				
+				$output = json_encode($outputArray);				
 			break;
 			
 			case 'serialise':

@@ -53,7 +53,77 @@ Class XMLToArray {
 		self::deleteParents($return);
 		return $return;
 	}
-
+	
+	/*
+		Remove any junk
+	*/
+	public static function cleanArrayForJSON($array){
+	
+		//remove any empty strings
+		foreach($array as $key => $val){
+			
+			//remove empty
+			if($val == ''){
+				unset($array[$key]);
+			}
+			
+			//remove unneeded keys
+			else if(substr($key,0,1) == '_'){
+				$shortenedKey = substr($key,1);
+				if(!array_key_exists($shortenedKey,$array)){ //if it doesn't exist
+				
+					$array[$shortenedKey] = $val;
+					unset($array[$key]);
+					$key = $shortenedKey;
+				}
+			}
+			
+			//recurse
+			if(is_array($val)){
+				$array[$key] = XMLToArray::cleanArrayForJSON($array[$key]);	
+			}
+			
+		}	
+		return $array;
+	}
+	
+	
+	/*
+		Ensure arrays get rendered correctly
+	*/
+	
+	public static function processArrayForJSON($array){
+		
+		foreach($array as $key => $val){
+			//remove 'nested arrays'
+			if(is_array($val) && count($val) == 1 && array_key_exists($key,$val)){
+				
+				//ensure that the nested array is an array
+				$keys = array_keys($val[$key]);
+				
+				if(count($val[$key]) == 0){
+					unset($array[$key]);	continue;
+				}
+				else if($keys[0] === 0){
+					$array[$key] = $val[$key];	
+				}
+				else{
+					$array[$key] = array($val[$key]);
+				}
+				
+			}
+						
+			//recurse
+			if(is_array($val)){
+				$array[$key] = XMLToArray::processArrayForJSON($array[$key]);	
+			}
+		
+		
+		}
+		
+		return $array;
+	}
+	
 	// Remove recursion in result array
 	private function deleteParents(&$ary) {
 		foreach ($ary as $k => $v) {

@@ -4,7 +4,7 @@ require_once(TOOLKIT . '/class.sectionmanager.php');
 require_once(TOOLKIT . '/class.fieldmanager.php');
 require_once(TOOLKIT . '/class.entrymanager.php');
 
-Class REST_Sections {
+Class REST_Update {
 	
 	private static $_sections = NULL;
 	private static $_field_attributes = array('id', 'label', 'type', 'sortorder', 'location', 'show_column');
@@ -38,39 +38,41 @@ Class REST_Sections {
 	
 	public function get() {
 			
-		$response = new XMLElement('response');
-		
+		$response = new XMLElement('updateResponse');
+		$sectionsXml = new XMLElement('section');
+
 		foreach(self::$_sections as $section) {
 			
 			$section_xml = new XMLElement('section');
 			
 			$meta = $section->get();
-			foreach($meta as $key => $value) $section_xml->setAttribute(Lang::createHandle($key), $value);
 			
-			$fields = $section->fetchFields();
+			$section_xml->setAttribute('id',$meta['id']);
+			$section_xml->setAttribute('handle',$meta['handle']);
 			
-			foreach($fields as $field) {
-				$meta = $field->get();
-				unset($meta['field_id']);
-				
-				$field_xml = new XMLElement($meta['element_name'], null);					
-				
-				foreach(self::$_field_attributes as $attr) $field_xml->setAttribute(Lang::createHandle($attr), $meta[$attr]);
-				
-				foreach($meta as $key => $value) {
-					if (in_array($key, self::$_field_attributes)) continue;
+			$entriesXml = new XMLElement('entry');
+			
+			$entries = EntryManager::fetchByPage(1,$meta['id'],999999999);
+			
+			foreach($entries['records'] as $sectionEntry){
 
-					else if ($value != '' && !is_array($value)) {
-						$field_xml->appendChild(new XMLElement(Lang::createHandle($key), General::sanitize($value)));
-					}
-				}
+				$entryXml = new XMLElement('entry');
 				
-				$section_xml->appendChild($field_xml);
+				$entryMeta = $sectionEntry->get();
+				
+				$entryXml->setAttribute('id',$entryMeta['id']);
+				$entryXml->setAttribute('dateCreated',$entryMeta['creation_date']);
+				$entryXml->setAttribute('dateModified',$entryMeta['modification_date']);
+				
+				$entriesXml->appendChild($entryXml);
+				
 			}
-			
-			$response->appendChild($section_xml);
+			$section_xml->appendChild($entriesXml);
+			$sectionsXml->appendChild($section_xml);
 			
 		}
+		
+		$response->appendChild($sectionsXml);
 		
 		REST_API::sendOutput($response);
 		
