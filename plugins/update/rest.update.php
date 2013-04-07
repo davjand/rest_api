@@ -39,16 +39,20 @@ Class REST_Update {
 	public function get() {
 			
 		$response = new XMLElement('updateResponse');
-		$sectionsXml = new XMLElement('section');
+		
 
 		foreach(self::$_sections as $section) {
 			
-			$section_xml = new XMLElement('section');
+			
 			
 			$meta = $section->get();
 			
+			$section_xml = new XMLElement($meta['handle']);
+			
 			$section_xml->setAttribute('id',$meta['id']);
 			$section_xml->setAttribute('handle',$meta['handle']);
+			
+			
 			
 			$entriesXml = new XMLElement('entry');
 			
@@ -68,11 +72,11 @@ Class REST_Update {
 				
 			}
 			$section_xml->appendChild($entriesXml);
-			$sectionsXml->appendChild($section_xml);
+			$response->appendChild($section_xml);
 			
 		}
 		
-		$response->appendChild($sectionsXml);
+		
 		
 		REST_API::sendOutput($response);
 		
