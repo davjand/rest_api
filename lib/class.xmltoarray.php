@@ -124,6 +124,27 @@ Class XMLToArray {
 		return $array;
 	}
 	
+	/**
+	
+		Simplify the output structure for JSON for where relationships id
+		
+	*/
+	public static function processJSONRelations($array){
+		foreach($array as $key => $val){
+			if(is_array($val) && count($val) == 1 && array_key_exists('id', $val)){
+				$array[$key] = $val['id'];
+			}
+		
+				
+			//recurse
+			if(is_array($array[$key])){
+				$array[$key] = XMLToArray::processJSONRelations($array[$key]);	
+			}	
+		}
+		return $array;
+		
+	}
+	
 	// Remove recursion in result array
 	private function deleteParents(&$ary) {
 		foreach ($ary as $k => $v) {

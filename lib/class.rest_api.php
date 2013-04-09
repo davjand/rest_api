@@ -35,7 +35,7 @@ Class REST_API {
 		
 		// store request parameters for later
 		self::$_token = trim($_REQUEST['token']);
-		self::$_output_type = (isset($_REQUEST['format']) ? $_REQUEST['format'] : 'xml');		
+		self::$_output_type = (isset($_REQUEST['format']) ? $_REQUEST['format'] : 'json');		
 		self::$_uri = explode('/', trim($_REQUEST['url'], '/'));
 		self::$_http_method = strtolower($_SERVER['REQUEST_METHOD']);
 		
@@ -92,7 +92,9 @@ Class REST_API {
 				$outputArray = XMLToArray::cleanArrayForJSON($outputArray);
 				
 				$outputArray = XMLToArray::processArrayForJSON($outputArray);
-
+				$outputArray = XMLToArray::processJSONRelations($outputArray);
+				
+				//print_r($outputArray);
 				
 				$output = json_encode($outputArray);				
 			break;
