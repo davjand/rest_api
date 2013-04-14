@@ -97,13 +97,13 @@ Class REST_Data {
 					
 						case 'input':
 						
-							$entryXml->setAttribute($fName,$e['value']);
+							$entryXml->setAttribute($fName,htmlentities($e['value']));
 							break;
 							
 						case 'textarea':
 							
 							if($f['formatter'] == ''){
-								$entryXml->setAttribute($fName,$e['value']);
+								$entryXml->setAttribute($fName,htmlentities($e['value']));
 							}
 							else{
 								$entryXml->setAttribute($fName,htmlentities($e['value_formatted']));
