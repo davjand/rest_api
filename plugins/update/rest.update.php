@@ -49,18 +49,15 @@ Class REST_Update {
 			
 			$section_xml = new XMLElement($meta['handle']);
 			
-			$section_xml->setAttribute('id',$meta['id']);
-			$section_xml->setAttribute('handle',$meta['handle']);
-			
-			
-			
-			$entriesXml = new XMLElement('entry');
+			//$section_xml->setAttribute('id',$meta['id']);
+			//$section_xml->setAttribute('handle',$meta['handle']);
+
 			
 			$entries = EntryManager::fetchByPage(1,$meta['id'],999999999);
 			
 			foreach($entries['records'] as $sectionEntry){
 
-				$entryXml = new XMLElement('entry');
+				$entryXml = new XMLElement($meta['handle']);
 				
 				$entryMeta = $sectionEntry->get();
 				
@@ -68,10 +65,9 @@ Class REST_Update {
 				$entryXml->setAttribute('dateCreated',$entryMeta['creation_date']);
 				$entryXml->setAttribute('dateModified',$entryMeta['modification_date']);
 				
-				$entriesXml->appendChild($entryXml);
+				$section_xml->appendChild($entryXml);
 				
 			}
-			$section_xml->appendChild($entriesXml);
 			$response->appendChild($section_xml);
 			
 		}
