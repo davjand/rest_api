@@ -35,7 +35,7 @@ Class REST_API {
 		
 		// store request parameters for later
 		self::$_token = trim($_REQUEST['token']);
-		self::$_output_type = (isset($_REQUEST['format']) ? $_REQUEST['format'] : 'json');		
+		self::$_output_type = (isset($_REQUEST['format']) ? $_REQUEST['format'] : 'xml');		
 		self::$_uri = explode('/', trim($_REQUEST['url'], '/'));
 		self::$_http_method = strtolower($_SERVER['REQUEST_METHOD']);
 		
