@@ -120,6 +120,7 @@ Class REST_API {
 			
 		 	case 'xml':
 				header('Content-Type: text/xml; charset=utf-8');
+				$xml = str_replace('&','',$xml);
 				$output = $xml;
 			break;
 			
