@@ -88,7 +88,14 @@ Class REST_API {
 			case 'json':
 				header('Content-Type: text/plain; charset=utf-8');
 				
+				//strip any ampersands
+				$xml = str_replace('&','&amp;',$xml);
+				
+				
 				$outputArray = XMLToArray::convert($xml);
+				
+				//print_r($xml); die();
+				
 				$outputArray = XMLToArray::cleanArrayForJSON($outputArray);
 				
 				$outputArray = XMLToArray::processArrayForJSON($outputArray);
