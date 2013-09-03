@@ -89,7 +89,7 @@ Class REST_API {
 				header('Content-Type: text/plain; charset=utf-8');
 				
 				//strip any ampersands
-				$xml = str_replace('&','',$xml);
+				
 				
 				
 				$outputArray = XMLToArray::convert($xml);

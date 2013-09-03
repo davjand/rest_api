@@ -96,8 +96,9 @@ Class REST_Data {
 					switch($field->get('type')){
 					
 						case 'input':
-						
-							$entryXml->setAttribute($fName,htmlentities($e['value']));
+							$val = str_replace('&','',htmlentities($e['value']));
+							
+							$entryXml->setAttribute($fName,$val);
 							break;
 							
 						case 'textarea':
