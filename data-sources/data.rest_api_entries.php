@@ -7,7 +7,7 @@
 
 		public $dsParamROOTELEMENT = 'response';
 		public $dsParamORDER = 'desc';
-		public $dsParamLIMIT = '99999';
+		public $dsParamLIMIT = '999999999';
 		public $dsParamREDIRECTONEMPTY = 'no';
 		public $dsParamSORT = 'system:id';
 		public $dsParamSTARTPAGE = '1';
