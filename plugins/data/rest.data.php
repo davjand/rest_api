@@ -84,7 +84,6 @@ Class REST_Data {
 				$entryXml->setAttribute('id',$entryMeta['id']);
 				$entryXml->setAttribute('dateCreated',$entryMeta['creation_date']);
 				$entryXml->setAttribute('dateModified',$entryMeta['modification_date']);
-				
 				foreach($fields as $field){
 					
 					$e = $entry->getData($field->get('id'),false);
@@ -163,6 +162,25 @@ Class REST_Data {
 							
 								$item = new XMLElement($fName);
 								$item->setAttribute('id',$e['relation_id']);
+								$fieldXml->appendChild($item);	
+							}
+							break;
+						case 'select':
+
+							$fieldXml = new XMLElement($fName);
+							
+							if(is_array($e['handle'])){
+								
+								foreach($e['handle'] as $relId){
+									$item = new XMLElement($fName);
+									$item->setAttribute('id',$relId);
+									$fieldXml->appendChild($item);
+								}	
+							}
+							else{
+							
+								$item = new XMLElement($fName);
+								$item->setAttribute('id',$e['handle']);
 								$fieldXml->appendChild($item);	
 							}
 							break;
