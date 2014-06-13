@@ -95,7 +95,10 @@ Class REST_Data {
 					switch($field->get('type')){
 					
 						case 'input':
-							$val = str_replace('&','',htmlentities($e['value']));
+							
+							$val = $e['value'];
+							$val = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $val);
+							$val = str_replace('&','',htmlentities($val));
 							
 							$entryXml->setAttribute($fName,$val);
 							break;
